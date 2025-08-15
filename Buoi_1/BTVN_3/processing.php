@@ -31,6 +31,18 @@ function isEvenOrOdd($num) {
     return ($num % 2 == 0) ? "Số chẵn" : "Số lẻ";
 }
 
+$sqlservername = "sqlXXX.infinityfree.com";  // Hostname từ InfinityFree
+$sqlusername   = "epiz_12345678";            // Username từ InfinityFree
+$sqlpassword   = "YOUR_DB_PASSWORD";         // Mật khẩu bạn đặt khi tạo DB
+$sqldbname     = "epiz_12345678_caculator";  // Tên database bạn đã tạo
+
+$conn = new mysqli($sqlservername, $sqlusername, $sqlpassword, $sqldbname);
+
+// Kiểm tra kết nối
+if ($conn->connect_error) {
+    die("Kết nối thất bại: " . $conn->connect_error);
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "135790";
