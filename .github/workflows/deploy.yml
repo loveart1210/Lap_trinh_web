@@ -1,0 +1,23 @@
+name: Deploy to InfinityFree
+
+on:
+  push:
+    branches:
+      - main   # Hoặc branch bạn muốn deploy
+
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Upload files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /htdocs/
+          local-dir: ./
+          dangerous-clean-slate: false # Đặt thành true nếu bạn muốn xóa tất cả file trên server trước khi upload
