@@ -18,6 +18,6 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /loveart.free.nf/htdocs/
+          server-dir: /loveart1210.free.nf/htdocs/
           local-dir: ./Buoi_1/ # Thư mục chứa mã nguồn của bạn
           dangerous-clean-slate: true # Đặt thành true nếu bạn muốn xóa tất cả file trên server trước khi upload
