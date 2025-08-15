@@ -20,4 +20,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /htdocs/
           local-dir: ./
-          dangerous-clean-slate: false # Đặt thành true nếu bạn muốn xóa tất cả file trên server trước khi upload
+          dangerous-clean-slate: true # Đặt thành true nếu bạn muốn xóa tất cả file trên server trước khi upload
