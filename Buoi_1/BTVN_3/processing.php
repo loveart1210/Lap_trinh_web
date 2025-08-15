@@ -32,23 +32,11 @@ function isEvenOrOdd($num) {
 }
 
 // Kết nối đến cơ sở dữ liệu
-$sqlservername = "sql209.infinityfree.com";  // Hostname từ InfinityFree
-$sqlusername   = "if0_39693741";            // Username từ InfinityFree
-$sqlpassword   = "loveart1210";         // Mật khẩu bạn đặt khi tạo DB
-$sqldbname     = "if0_39693741_caculator_db";  // Tên database bạn đã tạo
-
-$connsql = new mysqli($sqlservername, $sqlusername, $sqlpassword, $sqldbname);
-
-// Kiểm tra kết nối
-if ($conn->connect_error) {
-    die("Kết nối thất bại: " . $conn->connect_error);
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "135790";
-$database = "calculator_db";
-
+$servername = "sql209.infinityfree.com";
+$username = "if0_39693741";
+$password = "loveart1210";
+$database = "if0_39693741_caculator_db";
+    
 // Create connection
 $conn = new mysqli($servername, $username, $password, $database, 3306);
 if ($conn->connect_error) {
