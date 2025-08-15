@@ -35,7 +35,7 @@ function isEvenOrOdd($num) {
 $servername = "localhost";
 $username = "root";
 $password = "135790";
-$database = "caculator_db_copy";
+$database = "hello";
     
 // Create connection
 $conn = new mysqli($servername, $username, $password, $database, 3306);
