@@ -30,38 +30,4 @@ function isEvenOrOdd($num) {
     if (!is_numeric($num)) return "Không phải số chẵn/lẻ";
     return ($num % 2 == 0) ? "Số chẵn" : "Số lẻ";
 }
-
-// Kết nối đến cơ sở dữ liệu
-$servername = "sql209.infinityfree.com";
-$username = "if0_39693741";
-$password = "loveart1210";
-$database = "if0_39693741_caculator_db";
-    
-// Create connection
-$conn = new mysqli($servername, $username, $password, $database, 3306);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Save calculation history
-function saveCalculation($operation, $num1, $num2, $result) {
-    global $conn;
-    $stmt = $conn->prepare("INSERT INTO calculation_history (operation, num1, num2, result, timestamp) VALUES (?, ?, ?, ?, NOW())");
-    $stmt->bind_param("sddd", $operation, $num1, $num2, $result);
-    $stmt->execute();
-    $stmt->close();
-}
-
-// Save query history
-function saveQuery($queryType, $num, $result) {
-    global $conn;
-    $stmt = $conn->prepare("INSERT INTO query_history (query_type, number, result, timestamp) VALUES (?, ?, ?, NOW())");
-    $stmt->bind_param("sds", $queryType, $num, $result);
-    $stmt->execute();
-    $stmt->close();
-}
-
-// if (isset($conn) && $conn instanceof mysqli) {
-//     $conn->close();
-// }
 ?>

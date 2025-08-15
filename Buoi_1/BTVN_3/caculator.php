@@ -1,5 +1,5 @@
 <?php
-require_once "processing_copy.php";
+require_once "processing.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $operation = $_POST["operation"];
@@ -10,28 +10,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     switch ($operation) {
         case "Cong":
             $result = calculateSum($num1, $num2);
-            saveCalculation("Tổng", $num1, $num2, $result);
             break;
         case "Tru":
             $result = calculateDifference($num1, $num2);
-            saveCalculation("Hiệu", $num1, $num2, $result);
             break;
         case "Nhan":
             $result = calculateProduct($num1, $num2);
-            saveCalculation("Tích", $num1, $num2, $result);
             break;
         case "Chia":
             $result = calculateQuotient($num1, $num2);
-            saveCalculation("Thương", $num1, $num2, $result);
             break;
     }
 
     $queryNum = floatval($_POST["queryNum"]);
     $primeResult = isPrime($queryNum);
-    saveQuery("Nguyên tố", $queryNum, $primeResult);
-    
     $evenOddResult = isEvenOrOdd($queryNum);
-    saveQuery("Chẵn/Lẻ", $queryNum, $evenOddResult);
 }
 ?>
 
