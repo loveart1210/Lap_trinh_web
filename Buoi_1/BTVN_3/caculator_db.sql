@@ -1,6 +1,3 @@
-CREATE DATABASE calculator_db;
-USE calculator_db;
-
 CREATE TABLE calculation_history (
     id INT AUTO_INCREMENT PRIMARY KEY,
     operation VARCHAR(50) NOT NULL,
