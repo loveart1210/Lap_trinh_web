@@ -1,5 +1,5 @@
-CREATE DATABASE calculator_db;
-USE calculator_db;
+CREATE DATABASE calculator_db_copy;
+USE calculator_db_copy;
 
 CREATE TABLE calculation_history (
     id INT AUTO_INCREMENT PRIMARY KEY,
