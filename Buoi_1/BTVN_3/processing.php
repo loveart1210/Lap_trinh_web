@@ -31,12 +31,13 @@ function isEvenOrOdd($num) {
     return ($num % 2 == 0) ? "Số chẵn" : "Số lẻ";
 }
 
+// Kết nối đến cơ sở dữ liệu
 $sqlservername = "sql209.infinityfree.com";  // Hostname từ InfinityFree
 $sqlusername   = "if0_39693741";            // Username từ InfinityFree
 $sqlpassword   = "loveart1210";         // Mật khẩu bạn đặt khi tạo DB
 $sqldbname     = "if0_39693741_caculator_db";  // Tên database bạn đã tạo
 
-$conn = new mysqli($sqlservername, $sqlusername, $sqlpassword, $sqldbname);
+$connsql = new mysqli($sqlservername, $sqlusername, $sqlpassword, $sqldbname);
 
 // Kiểm tra kết nối
 if ($conn->connect_error) {
