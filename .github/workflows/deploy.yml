@@ -20,4 +20,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /loveart.free.nf/htdocs/
           local-dir: ./          # Thư mục chứa mã nguồn của bạn
-          dangerous-clean-slate: false  # Đặt thành true nếu bạn muốn xóa tất cả file trên server trước khi upload
+          dangerous-clean-slate: true  # Đặt thành true nếu bạn muốn xóa tất cả file trên server trước khi upload
