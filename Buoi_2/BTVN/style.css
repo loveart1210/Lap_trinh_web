@@ -1,0 +1,95 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: #333;
+    background-color: #EFF1F1;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #596368;
+}
+
+form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.name-group {
+    display: flex;
+    gap: 50px;
+
+}
+
+.name {
+    margin-top: -27px;
+}
+
+.name-group>div {
+    flex: 1;
+}
+
+.pay-for {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.pay-for>div {
+    flex: 1 1 50%;
+}
+
+.upload-area {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    align-items: center;
+    border-radius: 4px;
+}
+
+button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+}
+
+.display-section {
+    max-width: 800px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.display-section img {
+    max-width: 100%;
+    height: auto;
+}
