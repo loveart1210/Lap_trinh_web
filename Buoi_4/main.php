@@ -115,6 +115,23 @@ if ($action == 'create') {
         echo "Error deleting record: " . $conn->error . "<br>";
     }
     displayGuests($conn, "Danh sách nhân viên sau khi xóa");
+} elseif ($action == 'undo') {
+    $conn->select_db($dbname);
+    // Truncate table to reset
+    $sql = "TRUNCATE TABLE MyGuests";
+    $conn->query($sql);
+    // Insert original data
+    $sql = "INSERT INTO MyGuests (firstname, lastname, email) VALUES
+        ('John', 'Doe', 'john@example.com'),
+        ('Jane', 'Smith', 'jane@example.com'),
+        ('James', 'Johnson', 'james@example.com'),
+        ('Emily', 'Brown', 'emily@example.com')";
+    if ($conn->query($sql) === TRUE) {
+        echo "Hoàn tác sửa và xóa thành công<br>";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+    displayGuests($conn, "Danh sách nhân viên sau khi hoàn tác");
 }
 
 $conn->close();
@@ -190,6 +207,7 @@ $conn->close();
         <a href="?action=display">Hiển thị Danh sách</a>
         <a href="?action=update">Sửa Nhân viên (James -> Jane)</a>
         <a href="?action=delete">Xóa Nhân viên (ID=3)</a>
+        <a href="?action=undo">Hoàn tác Sửa và Xóa</a>
     </div>
     <!-- Results will be displayed here based on action -->
 </body>
