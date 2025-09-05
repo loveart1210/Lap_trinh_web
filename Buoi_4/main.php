@@ -1,8 +1,8 @@
 <?php
-$servername = "localhost";
-$username = "root"; // Adjust if needed
-$password = "135790"; // Adjust if needed
-$dbname = "b5_mydb";
+$servername = "sql209.infinityfree.com";
+$username = "if0_39693741"; // Adjust if needed
+$password = "loveart1210"; // Adjust if needed
+$dbname = "if0_39693741_btvn_buoi_4";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password);
