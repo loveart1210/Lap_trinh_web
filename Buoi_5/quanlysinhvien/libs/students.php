@@ -17,10 +17,10 @@ function connect_db()
 
     // Nếu chưa kết nối thì thực hiện kết nối
     if (!$conn) {
-        $host = "localhost";
-        $dbname = "qlsinhvien"; // Tên database
-        $user = "root";
-        $password = "135790";
+        $host = "sql209.infinityfree.com";
+        $dbname = "if0_39693741_buoi5"; // Tên database
+        $user = "if0_39693741";
+        $password = "loveart1210";
 
         try {
             $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
