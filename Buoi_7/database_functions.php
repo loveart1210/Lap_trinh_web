@@ -140,7 +140,7 @@ function get_all_departments()
     global $conn;
     connect_db();
     try {
-        $stmt = $conn->prepare("SELECT * FROM Departments ORDER BY department_name ASC");
+        $stmt = $conn->prepare("SELECT * FROM departments ORDER BY department_name ASC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch(PDOException $e) {
@@ -179,6 +179,7 @@ function add_department($department_name)
         return false;
     }
 }
+
 
 // Sửa phòng ban
 function edit_department($department_id, $department_name)
