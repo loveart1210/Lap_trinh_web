@@ -1,10 +1,10 @@
 <?php // login.php
 session_start();
-$host = 'localhost';
-$data = 'b7_auth_http';
-$user = 'root';         // Change as necessary
-$pass = '135790';        // Change as necessary
-$chrs = 'utf8mb4';
+$host = 'sql209.infinityfree.com';
+$db   = 'if0_39693741_buoi5';
+$user = 'if0_39693741';
+$pass = 'loveart1210';
+$charset = 'utf8mb4';
 $attr = "mysql:host=$host;dbname=$data;charset=$chrs";
 $opts =
   [

@@ -1,8 +1,8 @@
 <?php
-$host = "localhost";
-$user = "root";
-$pass = "135790";
-$db   = "employee_db";
+$host = 'sql209.infinityfree.com';
+$db   = 'if0_39693741_buoi5';
+$user = 'if0_39693741';
+$pass = 'loveart1210';
 
 $conn = new mysqli($host, $user, $pass);
 
