@@ -1,8 +1,10 @@
 <?php
-require '../database_functions.php';
-$id = isset($_POST['id']) ? (int)$_POST['id'] : '';
-if ($id) {
-    delete_role($id);
+require_once '../database_functions.php';
+
+if (!isset($_GET['id'])) {
+    die("Thiếu ID");
 }
-header("location: role_list.php");
-?>
+$id = (int)$_GET['id'];
+delete_role($id);
+header("Location: role_list.php");
+exit();

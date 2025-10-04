@@ -12,21 +12,22 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
 </head>
 <body>
     <h2>Danh sách phòng ban</h2>
-    <a href="../homepage_admin.php">Admin Home</a>
+    <a href="../homepage_admin.php">Admin Home</a> |
+    <a href="department_add.php">Thêm phòng ban</a>
     <br><br>
 
-    <table border="1" cellpadding="10" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Mã PB</th>
-                <th>Tên phòng ban</th>
-                <th>Vị trí</th>
-            </tr>
-        </thead>
-        <tbody id="tbody">
-            <tr><td colspan="3">Đang tải...</td></tr>
-        </tbody>
-    </table>
+  <table border="1" cellpadding="10" cellspacing="0">
+      <thead>
+          <tr>
+              <th>Mã PB</th>
+              <th>Tên phòng ban</th>
+              <th>Hành động</th>
+          </tr>
+      </thead>
+      <tbody id="tbody">
+          <tr><td colspan="2">Đang tải...</td></tr>
+      </tbody>
+  </table>
 
 <script>
 (async function(){
@@ -43,9 +44,12 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
     }
     document.getElementById('tbody').innerHTML = data.map(x=>`
       <tr>
-        <td>${x.dept_id}</td>
-        <td>${escapeHtml(x.dept_name)}</td>
-        <td>${escapeHtml(x.location)}</td>
+        <td>${x.department_id}</td>
+        <td>${escapeHtml(x.department_name)}</td>
+        <td>
+          <a href="department_edit.php?id=${x.department_id}">Sửa</a> | 
+          <a href="department_delete.php?id=${x.department_id}" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+        </td>
       </tr>
     `).join('');
   }catch(e){

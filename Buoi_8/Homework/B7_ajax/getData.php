@@ -1,6 +1,6 @@
 <?php
 function getConnection() {
-    $conn = new mysqli("localhost", "root", "135790", "company_db");
+    $conn = new mysqli("localhost", "root", "135790", "employee_db");
     if ($conn->connect_error) {
         die("Kết nối thất bại: " . $conn->connect_error);
     }

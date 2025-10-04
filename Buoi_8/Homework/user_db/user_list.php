@@ -12,8 +12,8 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
 </head>
 <body>
     <h2>Danh sách người dùng</h2>
-    <a href="user_add.php">Thêm người dùng</a><br>
-    <a href="../homepage_admin.php">Admin Home</a>
+    <a href="../homepage_admin.php">Admin Home</a> |
+    <a href="user_add.php">Thêm người dùng</a>
     <br><br>
 
     <table border="1" cellpadding="10" cellspacing="0" id="tbl">
@@ -21,8 +21,9 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
             <tr>
                 <th>User ID</th>
                 <th>Tên đăng nhập</th>
-                <th>Mật khẩu (hash)</th>
+                <th>Mật khẩu</th>
                 <th>Vai trò</th>
+                <th>Hành động</th>
             </tr>
         </thead>
         <tbody id="tbody">
@@ -31,32 +32,31 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
     </table>
 
 <script>
-(async function loadUsers(){
+(async function(){
   try {
-    const r = await fetch('../API/api_user_list.php', {credentials:'same-origin'});
-    if (!r.ok) {
-      const t = await r.json().catch(()=>({}));
-      document.getElementById('tbody').innerHTML =
-        `<tr><td colspan="4">Lỗi tải dữ liệu (${r.status}) ${t.error||''}</td></tr>`;
-      return;
-    }
+    const r = await fetch('../API/api_user_list.php');
     const data = await r.json();
-    if (!Array.isArray(data) || data.length===0) {
+    if (!Array.isArray(data) || data.length === 0) {
       document.getElementById('tbody').innerHTML =
-        `<tr><td colspan="4">Không có dữ liệu</td></tr>`;
+        `<tr><td colspan="5">Không có dữ liệu</td></tr>`;
       return;
     }
-    document.getElementById('tbody').innerHTML = data.map(u => `
+
+    document.getElementById('tbody').innerHTML = data.map(user => `
       <tr>
-        <td>${u.id}</td>
-        <td>${escapeHtml(u.username)}</td>
-        <td>${escapeHtml(u.password_hash)}</td>
-        <td>${escapeHtml(u.role||'')}</td>
+        <td>${user.id}</td>
+        <td>${escapeHtml(user.username)}</td>
+        <td>${escapeHtml(user.password_hash ?? "")}</td>
+        <td>${escapeHtml(user.role)}</td>
+        <td>
+          <a href="user_edit.php?id=${user.id}">Sửa</a> | 
+          <a href="user_delete.php?id=${user.id}" onclick="return confirm('Bạn có chắc muốn xóa user này?')">Xóa</a>
+        </td>
       </tr>
     `).join('');
   } catch (e) {
     document.getElementById('tbody').innerHTML =
-      `<tr><td colspan="4">Lỗi: ${e?.message||e}</td></tr>`;
+      `<tr><td colspan="5">Lỗi: ${e.message}</td></tr>`;
   }
 })();
 
@@ -67,5 +67,6 @@ function escapeHtml(str){
     .replaceAll("'",'&#39;');
 }
 </script>
+
 </body>
 </html>

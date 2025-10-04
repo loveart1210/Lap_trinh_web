@@ -1,5 +1,9 @@
 <?php
 session_start();
+// Chỉ lưu session trong bộ nhớ của trình duyệt
+ini_set('session.cookie_lifetime', 0); 
+ini_set('session.gc_maxlifetime', 0);
+
 require_once '../B7_ajax/getData.php'; // file chứa hàm kết nối DB
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

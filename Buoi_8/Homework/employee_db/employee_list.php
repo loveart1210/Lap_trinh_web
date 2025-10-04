@@ -12,7 +12,8 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
 </head>
 <body>
     <h2>Danh sách nhân viên</h2>
-    <a href="../homepage_admin.php">Admin Home</a>
+    <a href="../homepage_admin.php">Admin Home</a> |
+    <a href="employee_add.php">Thêm nhân viên</a>
     <br><br>
 
     <table border="1" cellpadding="10" cellspacing="0">
@@ -20,8 +21,9 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
             <tr>
                 <th>Mã NV</th>
                 <th>Họ tên</th>
-                <th>Email</th>
+                <th>Phòng ban</th>
                 <th>Vai trò</th>
+                <th>Hành động</th>
             </tr>
         </thead>
         <tbody id="tbody">
@@ -44,10 +46,14 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
     }
     document.getElementById('tbody').innerHTML = data.map(x=>`
       <tr>
-        <td>${x.emp_id}</td>
-        <td>${escapeHtml(x.emp_name)}</td>
-        <td>${escapeHtml(x.email)}</td>
-        <td>${escapeHtml(x.role||'')}</td>
+        <td>${x.employee_id}</td>
+        <td>${escapeHtml(x.first_name)} ${escapeHtml(x.last_name)}</td>
+        <td>${escapeHtml(x.department_name ?? '')}</td>
+        <td>${escapeHtml(x.role_name ?? '')}</td>
+        <td>
+          <a href="employee_edit.php?id=${x.employee_id}">Sửa</a> | 
+          <a href="employee_delete.php?id=${x.employee_id}" onclick="return confirm('Bạn có chắc muốn xóa nhân viên này?')">Xóa</a>
+        </td>
       </tr>
     `).join('');
   }catch(e){

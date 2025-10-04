@@ -8,24 +8,23 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Danh sách vai trò</title>
+<title>Danh sách chức vụ</title>
 </head>
 <body>
     <h2>Danh sách vai trò</h2>
-    <a href="role_add.php">Thêm vai trò</a> | <a href="../homepage_admin.php">Admin Home</a>
+    <a href="../homepage_admin.php">Admin Home</a> |
+    <a href="role_add.php">Thêm vai trò</a>
     <br><br>
 
     <table border="1" cellpadding="10" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Role ID</th>
-                <th>Tên vai trò</th>
-                <th>Mô tả</th>
-            </tr>
-        </thead>
-        <tbody id="tbody">
-            <tr><td colspan="3">Đang tải...</td></tr>
-        </tbody>
+      <thead>
+        <tr>
+          <th>Role ID</th>
+          <th>Tên vai trò</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
     </table>
 
 <script>
@@ -45,7 +44,10 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
       <tr>
         <td>${x.role_id}</td>
         <td>${escapeHtml(x.role_name)}</td>
-        <td>${escapeHtml(x.description)}</td>
+        <td>
+          <a href="role_edit.php?id=${x.role_id}">Sửa</a> | 
+          <a href="role_delete.php?id=${x.role_id}" onclick="return confirm('Bạn có chắc muốn xóa vai trò này?')">Xóa</a>
+        </td>
       </tr>
     `).join('');
   }catch(e){

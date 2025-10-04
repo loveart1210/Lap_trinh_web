@@ -26,7 +26,7 @@ if ($_SESSION['role'] != 'Admin') {
         
         <div class="setup">
             <p>Nhấn nút để tạo Database.</p>
-            <a href="setup_database.php" class="btn setup-link">Tạo Database</a>
+            <a href="B7_auth_http/setup_database.php" class="btn setup-link">Tạo Database</a>
         </div><br>
         <div class="logout">
             <a href="B7_auth_http/logout.php">Đăng xuất</a>

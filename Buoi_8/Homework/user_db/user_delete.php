@@ -1,16 +1,10 @@
 <?php
-session_start();
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: login.php");
-    exit();
-}
-
 require_once '../database_functions.php';
 
-$id = $_GET['id'] ?? 0;
-if ($id) {
-    deleteUser($id);
+if (!isset($_GET['id'])) {
+    die("Thiếu ID");
 }
+$id = (int)$_GET['id'];
+deleteUser($id);
 header("Location: user_list.php");
 exit();
-?>

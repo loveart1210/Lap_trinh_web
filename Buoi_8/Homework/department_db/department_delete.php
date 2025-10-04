@@ -1,8 +1,10 @@
 <?php
-require '../database_functions.php';
-$id = isset($_POST['id']) ? (int)$_POST['id'] : '';
-if ($id) {
-    delete_department($id);
+require_once '../database_functions.php';
+
+if (!isset($_GET['id'])) {
+    die("Thiếu ID");
 }
-header("location: department_list.php");
-?>
+$id = (int)$_GET['id'];
+delete_department($id);
+header("Location: department_list.php");
+exit();
