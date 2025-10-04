@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $role_name   = $_POST['role_name'];
     $description = $_POST['description'] ?? ""; // nếu không nhập, để rỗng
 
-    add_role($role_name, $description);
+    add_role($role_name);
 
     header("Location: role_list.php");
     exit();
