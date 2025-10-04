@@ -8,7 +8,7 @@ function getConnection()
     if ($pdo) return $pdo;
 
     $host = 'sql209.infinityfree.com';
-    $db   = 'if0_39693741_buoi5';
+    $db   = 'if0_39693741_buoi8';
     $user = 'if0_39693741';
     $pass = 'loveart1210';
     $charset = 'utf8mb4';

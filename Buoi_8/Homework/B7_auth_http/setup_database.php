@@ -1,6 +1,6 @@
 <?php
 $host = 'sql209.infinityfree.com';
-$db   = 'if0_39693741_buoi5';
+$db   = 'if0_39693741_buoi8';
 $user = 'if0_39693741';
 $pass = 'loveart1210';
 
