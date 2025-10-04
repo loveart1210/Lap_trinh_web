@@ -5,7 +5,7 @@ $db   = 'if0_39693741_buoi5';
 $user = 'if0_39693741';
 $pass = 'loveart1210';
 $charset = 'utf8mb4';
-$attr = "mysql:host=$host;dbname=$data;charset=$chrs";
+$attr = "mysql:host=$host;dbname=$db;charset=$charset";
 $opts =
   [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
