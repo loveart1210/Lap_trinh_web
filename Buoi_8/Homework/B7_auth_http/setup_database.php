@@ -18,8 +18,7 @@ $conn->query("CREATE TABLE IF NOT EXISTS departments (
 
 $conn->query("CREATE TABLE IF NOT EXISTS roles (
     role_id INT AUTO_INCREMENT PRIMARY KEY,
-    role_name VARCHAR(50) NOT NULL,
-    description VARCHAR(255)
+    role_name VARCHAR(50) NOT NULL
 )");
 
 $conn->query("CREATE TABLE IF NOT EXISTS employees (
