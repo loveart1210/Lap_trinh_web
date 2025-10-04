@@ -1,6 +1,6 @@
 <?php
 function getConnection() {
-    $conn = new mysqli("localhost", "root", "135790", "employee_db");
+    $conn = new mysqli("sql209.infinityfree.com", "if0_39693741", "loveart1210", "if0_39693741_buoi5");
     if ($conn->connect_error) {
         die("Kết nối thất bại: " . $conn->connect_error);
     }
