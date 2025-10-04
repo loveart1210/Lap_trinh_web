@@ -2,18 +2,28 @@
 global $conn;
 
 // Hàm kết nối CSDL
-function getConnection() {
-    $servername = "localhost";
-    $username = "root";
-    $password = "135790";
-    $dbname = "employee_db";
+function getConnection()
+{
+    static $pdo;
+    if ($pdo) return $pdo;
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    if ($conn->connect_error) {
-        die("Kết nối thất bại: " . $conn->connect_error);
-    }
-    return $conn;  // BẮT BUỘC phải return
+    $host = 'sql209.infinityfree.com';
+    $db   = 'if0_39693741_buoi5';
+    $user = 'if0_39693741';
+    $pass = 'loveart1210';
+    $charset = 'utf8mb4';
+
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
+
+    $pdo = new PDO($dsn, $user, $pass, $options);
+    return $pdo;
 }
+
 
 
 // Hàm ngắt kết nối
@@ -32,7 +42,7 @@ function disconnect_db()
 // Lấy tất cả nhân viên
 function get_all_employees()
 {
-    $conn = getConnection();
+    $pdo = getConnection(); // PDO
     $sql = "SELECT e.employee_id, 
                    e.first_name, 
                    e.last_name, 
@@ -42,71 +52,64 @@ function get_all_employees()
             LEFT JOIN departments d ON e.department_id = d.department_id
             LEFT JOIN roles r ON e.role_id = r.role_id
             ORDER BY e.employee_id";
-    $res = $conn->query($sql);
-    $rows = [];
-    while ($r = $res->fetch_assoc()) $rows[] = $r;
-    $conn->close();
+    $stmt = $pdo->query($sql);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $rows;
 }
 
-// Lấy thông tin một nhân viên theo ID
+// Lấy thông tin 1 nhân viên
 function get_employee($employee_id)
 {
-    $conn = getConnection();
-    $stmt = $conn->prepare("SELECT * FROM employees WHERE employee_id=?");
-    $stmt->bind_param("i", $employee_id);
+    $pdo = getConnection();
+    $sql = "SELECT * FROM employees WHERE employee_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $employee_id, PDO::PARAM_INT);
     $stmt->execute();
-    $res = $stmt->get_result();
-    $row = $res->fetch_assoc();
-    $stmt->close();
-    $conn->close();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
     return $row;
 }
 
 // Thêm nhân viên
 function add_employee($first_name, $last_name, $department_id, $role_id)
 {
-    $conn = getConnection(); // lấy kết nối MySQLi
-    $sql = "INSERT INTO employees (first_name, last_name, department_id, role_id) 
-            VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssii", $first_name, $last_name, $department_id, $role_id);
-    $ok = $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    return $ok;
+    $pdo = getConnection();
+    $sql = "INSERT INTO employees (first_name, last_name, department_id, role_id)
+            VALUES (:first_name, :last_name, :dep, :role)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':first_name', $first_name);
+    $stmt->bindParam(':last_name', $last_name);
+    $stmt->bindParam(':dep', $department_id, PDO::PARAM_INT);
+    $stmt->bindParam(':role', $role_id, PDO::PARAM_INT);
+    return $stmt->execute();
 }
 
-
-// Sửa thông tin nhân viên
+// Cập nhật nhân viên
 function edit_employee($employee_id, $employee_firstname, $employee_lastname, $employee_dep, $employee_role)
 {
-    $conn = getConnection(); // lấy kết nối MySQLi
+    $pdo = getConnection();
     $sql = "UPDATE employees 
-            SET first_name=?, 
-                last_name=?, 
-                department_id=?, 
-                role_id=? 
-            WHERE employee_id=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssiii", $employee_firstname, $employee_lastname, $employee_dep, $employee_role, $employee_id);
-    $ok = $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    return $ok;
+            SET first_name = :first_name, 
+                last_name = :last_name, 
+                department_id = :dep_id, 
+                role_id = :role_id 
+            WHERE employee_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':first_name', $employee_firstname);
+    $stmt->bindParam(':last_name', $employee_lastname);
+    $stmt->bindParam(':dep_id', $employee_dep, PDO::PARAM_INT);
+    $stmt->bindParam(':role_id', $employee_role, PDO::PARAM_INT);
+    $stmt->bindParam(':id', $employee_id, PDO::PARAM_INT);
+    return $stmt->execute();
 }
-
 
 // Xóa nhân viên
 function delete_employee($employee_id)
 {
-    $conn = getConnection();
-    $stmt = $conn->prepare("DELETE FROM employees WHERE employee_id=?");
-    $stmt->bind_param("i", $employee_id);
-    $ok = $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    return $ok;
+    $pdo = getConnection();
+    $sql = "DELETE FROM employees WHERE employee_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $employee_id, PDO::PARAM_INT);
+    return $stmt->execute();
 }
 
 /*
@@ -118,65 +121,52 @@ function delete_employee($employee_id)
 // Lấy tất cả phòng ban
 function get_all_departments()
 {
-    $conn = getConnection();
+    $pdo = getConnection();
     $sql = "SELECT department_id, department_name FROM departments ORDER BY department_id";
-    $res = $conn->query($sql);
-    $rows = [];
-    while ($r = $res->fetch_assoc()) $rows[] = $r;
-    $conn->close();
-    return $rows;
+    $stmt = $pdo->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Lấy phòng ban theo ID
 function get_department($department_id)
 {
-    $conn = getConnection();
-    $stmt = $conn->prepare("SELECT * FROM departments WHERE department_id=?");
-    $stmt->bind_param("i", $department_id);
+    $pdo = getConnection();
+    $sql = "SELECT * FROM departments WHERE department_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $department_id, PDO::PARAM_INT);
     $stmt->execute();
-    $res = $stmt->get_result();
-    $row = $res->fetch_assoc();
-    $stmt->close();
-    $conn->close();
-    return $row;
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 // Thêm phòng ban
-function add_department($department_name) {
-    $conn = getConnection(); // lấy kết nối từ hàm getConnection()
-    $stmt = $conn->prepare("INSERT INTO departments (department_name) VALUES (?)");
-    $stmt->bind_param("s", $department_name);
-    $ok = $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    return $ok;
+function add_department($department_name)
+{
+    $pdo = getConnection();
+    $sql = "INSERT INTO departments (department_name) VALUES (:name)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':name', $department_name, PDO::PARAM_STR);
+    return $stmt->execute();
 }
-
-
 
 // Sửa phòng ban
 function edit_department($department_id, $department_name)
 {
-    $conn = getConnection(); // lấy kết nối MySQLi
-    $stmt = $conn->prepare("UPDATE departments SET department_name=? WHERE department_id=?");
-    $stmt->bind_param("si", $department_name, $department_id);
-    $ok = $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    return $ok;
+    $pdo = getConnection();
+    $sql = "UPDATE departments SET department_name = :name WHERE department_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':name', $department_name, PDO::PARAM_STR);
+    $stmt->bindParam(':id', $department_id, PDO::PARAM_INT);
+    return $stmt->execute();
 }
-
 
 // Xóa phòng ban
 function delete_department($department_id)
 {
-    $conn = getConnection();
-    $stmt = $conn->prepare("DELETE FROM departments WHERE department_id=?");
-    $stmt->bind_param("i", $department_id);
-    $ok = $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    return $ok;
+    $pdo = getConnection();
+    $sql = "DELETE FROM departments WHERE department_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $department_id, PDO::PARAM_INT);
+    return $stmt->execute();
 }
 
 /*
@@ -188,129 +178,111 @@ function delete_department($department_id)
 // Lấy tất cả chức vụ
 function get_all_roles()
 {
-    $conn = getConnection();
+    $pdo = getConnection();
     $sql = "SELECT role_id, role_name FROM roles ORDER BY role_id";
-    $res = $conn->query($sql);
-    $rows = [];
-    while ($r = $res->fetch_assoc()) $rows[] = $r;
-    $conn->close();
-    return $rows;
+    $stmt = $pdo->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Lấy chức vụ theo ID
 function get_role($role_id)
 {
-    $conn = getConnection();
-    $stmt = $conn->prepare("SELECT * FROM roles WHERE role_id=?");
-    $stmt->bind_param("i", $role_id);
+    $pdo = getConnection();
+    $sql = "SELECT * FROM roles WHERE role_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $role_id, PDO::PARAM_INT);
     $stmt->execute();
-    $res = $stmt->get_result();
-    $row = $res->fetch_assoc();
-    $stmt->close();
-    $conn->close();
-    return $row;
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 // Thêm chức vụ
-function add_role($role_name) {
-    $conn = getConnection();
-    $stmt = $conn->prepare("INSERT INTO roles (role_name) VALUES (?)");
-    $stmt->bind_param("s", $role_name);
-    $stmt->execute();
-    $stmt->close();
-    $conn->close();
+function add_role($role_name)
+{
+    $pdo = getConnection();
+    $sql = "INSERT INTO roles (role_name) VALUES (:name)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':name', $role_name, PDO::PARAM_STR);
+    return $stmt->execute();
 }
-
 
 // Sửa chức vụ
 function edit_role($role_id, $role_name)
 {
-    $conn = getConnection();
-    $stmt = $conn->prepare("UPDATE roles SET role_name=? WHERE role_id=?");
-    $stmt->bind_param("si", $role_name, $role_id);
-    $stmt->execute();
-    $stmt->close();
-    $conn->close();
+    $pdo = getConnection();
+    $sql = "UPDATE roles SET role_name = :name WHERE role_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':name', $role_name, PDO::PARAM_STR);
+    $stmt->bindParam(':id', $role_id, PDO::PARAM_INT);
+    return $stmt->execute();
 }
 
 // Xóa chức vụ
 function delete_role($role_id)
 {
-    $conn = getConnection();
-    $stmt = $conn->prepare("DELETE FROM roles WHERE role_id=?");
-    $stmt->bind_param("i", $role_id);
-    $ok = $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    return $ok;
+    $pdo = getConnection();
+    $sql = "DELETE FROM roles WHERE role_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $role_id, PDO::PARAM_INT);
+    return $stmt->execute();
 }
-?>
 
-<?php
 // ================= USER FUNCTIONS =================
 
 // Lấy tất cả users
 function getAllUsers() {
-    $conn = getConnection();
+    $pdo = getConnection();
     $sql = "SELECT id, username, role, password_hash FROM users ORDER BY id";
-    $res = $conn->query($sql);
-    $rows = [];
-    while ($r = $res->fetch_assoc()) $rows[] = $r;
-    $conn->close();
-    return $rows;
+    $stmt = $pdo->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Lấy user theo id
 function getUserById($id) {
-    $conn = getConnection();
-    $stmt = $conn->prepare("SELECT * FROM users WHERE id=?");
-    $stmt->bind_param("i", $id);
+    $pdo = getConnection();
+    $sql = "SELECT * FROM users WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-    $stmt->close();
-    $conn->close();
-    return $user;
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 // Thêm user
 function addUser($username, $password, $role) {
-    $conn = getConnection();
+    $pdo = getConnection();
     $hash = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = $conn->prepare("INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $username, $hash, $role);
-    $stmt->execute();
-    $stmt->close();
-    $conn->close();
+    $sql = "INSERT INTO users (username, password_hash, role) VALUES (:username, :hash, :role)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':username', $username);
+    $stmt->bindParam(':hash', $hash);
+    $stmt->bindParam(':role', $role);
+    return $stmt->execute();
 }
-
 
 // Sửa user
 function updateUser($id, $username, $password, $role) {
-    $conn = getConnection();
+    $pdo = getConnection();
     if (!empty($password)) {
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $conn->prepare("UPDATE users SET username=?, password_hash=?, role=? WHERE id=?");
-        $stmt->bind_param("sssi", $username, $hash, $role, $id);
+        $sql = "UPDATE users SET username = :username, password_hash = :hash, role = :role WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':hash', $hash);
     } else {
-        $stmt = $conn->prepare("UPDATE users SET username=?, role=? WHERE id=?");
-        $stmt->bind_param("ssi", $username, $role, $id);
+        $sql = "UPDATE users SET username = :username, role = :role WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
     }
-    $ok = $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    return $ok;
+    $stmt->bindParam(':username', $username);
+    $stmt->bindParam(':role', $role);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    return $stmt->execute();
 }
 
 // Xóa user
 function deleteUser($id) {
-    $conn = getConnection();
-    $stmt = $conn->prepare("DELETE FROM users WHERE id=?");
-    $stmt->bind_param("i", $id);
-    $ok = $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    return $ok;
+    $pdo = getConnection();
+    $sql = "DELETE FROM users WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    return $stmt->execute();
 }
 ?>
 
