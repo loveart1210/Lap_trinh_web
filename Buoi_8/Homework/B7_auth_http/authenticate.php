@@ -4,6 +4,11 @@ session_start();
 ini_set('session.cookie_lifetime', 0); 
 ini_set('session.gc_maxlifetime', 0);
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 require_once '../B7_ajax/getData.php'; // file chứa hàm kết nối DB
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
